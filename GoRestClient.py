@@ -13,12 +13,23 @@ class GoRestClient:
             if process == '1':
                 self.get_users()
             elif process == '2':
+                self.id = input("Enter the ID of the user you want to get: ")
                 self.get_user()
             elif process == '3':
+                self.email = input("email: ")
+                self.name = input("name: ")
+                self.gender = input("gender: ")
+                self.status = input("status: ")
                 self.create_user()
             elif process == '4':
+                self.id = input("Enter the ID of the user you want to update: ")
+                self.email = input("email: ")
+                self.name = input("name: ")
+                self.gender = input("gender: ")
+                self.status = input("status: ")
                 self.update_user()
             elif process == '5':
+                self.id = input("Enter the ID of the user you want to delete: ")
                 self.delete_user()
             elif process == 'E' or process == 'Ç' or process == '6' or process == 'e' or process == 'ç':
                 print('Your exit is done.')
@@ -27,7 +38,7 @@ class GoRestClient:
                 print('You made the wrong choice. Please try again.')
 
     def get_users(self):
-        result = requests.get("https://gorest.co.in/public/v2/users")
+        result = requests.get('https://gorest.co.in/public/v2/users')
         print("status code", result.status_code)
         result = json.loads(result.text)
 
@@ -35,23 +46,22 @@ class GoRestClient:
             print(i)
 
     def get_user(self):
-        id = input("Enter the ID of the user you want to get: ")
-        result = requests.get(f"https://gorest.co.in/public/v2/users/{id}")
+        result = requests.get(f"https://gorest.co.in/public/v2/users/{self.id}")
         print("status code", result.status_code)
         if result.status_code != 200:
             print("User not found")
         else:
             print(result.text)
 
-
     def create_user(self):
         url = "https://gorest.co.in/public/v2/users"
         headers = {'Authorization': 'Bearer a102bd6582f80eb0b2a7e6cce8b7ecbe4b35f7ddf8fade9225f6e6d279a4ee20'}
+
         body = {
-            "email": "cugce_murat@hotmail.com",
-            "name": "Tugce Murat",
-            "gender": "Female",
-            "status": "active"
+            "email": f"{self.email}",
+            "name": f"{self.name}",
+            "gender": f"{self.gender}",
+            "status": f"{self.status}"
         }
         result = requests.post(url, headers=headers, data=body)
         print("status code", result.status_code)
@@ -61,16 +71,15 @@ class GoRestClient:
         else:
             print("Has already been taken")
 
-
     def update_user(self):
-        id = input("Enter the ID of the user you want to update: ")
-        url = f"https://gorest.co.in/public/v2/users/{id}"
+        url = f"https://gorest.co.in/public/v2/users/{self.id}"
         headers = {'Authorization': 'Bearer a102bd6582f80eb0b2a7e6cce8b7ecbe4b35f7ddf8fade9225f6e6d279a4ee20'}
+
         body = {
-            "email": "bugra_murat@hotmail.com",
-            "name": "Bugra avcı",
-            "gender": "male",
-            "status": "active"
+            "email": f"{self.email}",
+            "name": f"{self.name}",
+            "gender": f"{self.gender}",
+            "status": f"{self.status}"
         }
         result = requests.patch(url, headers=headers, data=body)
         print("status code", result.status_code)
@@ -80,11 +89,8 @@ class GoRestClient:
         else:
             print("User Updated")
 
-
-
     def delete_user(self):
-        id = input("Enter the ID of the user you want to delete: ")
-        url =f"https://gorest.co.in/public/v2/users/{id}"
+        url =f"https://gorest.co.in/public/v2/users/{self.id}"
         headers = {'Authorization': 'Bearer a102bd6582f80eb0b2a7e6cce8b7ecbe4b35f7ddf8fade9225f6e6d279a4ee20'}
 
         result = requests.delete(url, headers=headers)
